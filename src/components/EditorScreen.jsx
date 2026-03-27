@@ -105,18 +105,54 @@ export default function EditorScreen({ questions: init, saveQuestions, saveAndPl
     setQs(prev => prev.filter((_, idx) => idx !== i));
   };
 
+  const exportQuestions = () => {
+    const json = JSON.stringify(qs, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quiz-questions.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importQuestions = (file) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (Array.isArray(data) && data.length > 0 && data[0].text !== undefined) {
+          setQs(data);
+          saveQuestions(data);
+          setSaved(true);
+          setTimeout(() => setSaved(false), 2000);
+        } else {
+          alert('Format de fichier invalide');
+        }
+      } catch { alert('Erreur de lecture du fichier'); }
+    };
+    r.readAsText(file);
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowY: 'auto', padding: '32px 24px', background: 'var(--bg)' }}>
       <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
           <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: '28px' }}>✏️ Mes questions</h2>
-          <div className="btn-group">
+          <div className="btn-group" style={{ flexWrap: 'wrap' }}>
             <button className="btn btn-secondary btn-sm" onClick={() => goTo('splash')}>← Retour</button>
             <button className="btn btn-secondary btn-sm" onClick={() => { saveQuestions(qs); setSaved(true); setTimeout(() => setSaved(false), 2000); }}>
               {saved ? '✓ Sauvegardé !' : '💾 Sauver'}
             </button>
             <button className="btn btn-primary btn-sm" onClick={() => saveAndPlay(qs)}>▶ Jouer</button>
+            <button className="btn btn-secondary btn-sm" onClick={exportQuestions} title="Exporter en JSON">📤 Exporter</button>
+            <label className="btn btn-secondary btn-sm" style={{ cursor: 'pointer' }} title="Importer un fichier JSON">
+              📥 Importer
+              <input type="file" accept=".json" style={{ display: 'none' }}
+                onChange={e => { importQuestions(e.target.files[0]); e.target.value = ''; }} />
+            </label>
           </div>
         </div>
 
