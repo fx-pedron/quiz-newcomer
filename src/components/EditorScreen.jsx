@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { compressImage } from '../utils/compressImage';
 
 const LBLS = ['A','B','C','D'];
 const BC   = ['badge-a','badge-b','badge-c','badge-d'];
@@ -72,24 +73,31 @@ export default function EditorScreen({ questions: init, saveQuestions, saveAndPl
       return { ...q, answerCount: n, correct: correct.length ? correct : [0] };
     }));
 
-  const uploadQuestionImg = (i, file) => {
+  const uploadQuestionImg = async (i, file) => {
     if (!file) { updateQ(i, { questionImage: null }); return; }
-    const r = new FileReader();
-    r.onload = e => updateQ(i, { questionImage: e.target.result });
-    r.readAsDataURL(file);
+    try {
+      const compressed = await compressImage(file);
+      updateQ(i, { questionImage: compressed });
+    } catch (e) {
+      console.error(e);
+      alert('Erreur lors du chargement de l\'image');
+    }
   };
 
-  const uploadImg = (i, j, file) => {
+  const uploadImg = async (i, j, file) => {
     if (!file) return;
-    const r = new FileReader();
-    r.onload = e =>
+    try {
+      const compressed = await compressImage(file);
       setQs(prev => prev.map((q, idx) => {
         if (idx !== i) return q;
         const images = [...q.images];
-        images[j] = e.target.result;
+        images[j] = compressed;
         return { ...q, images };
       }));
-    r.readAsDataURL(file);
+    } catch (e) {
+      console.error(e);
+      alert('Erreur lors du chargement de l\'image');
+    }
   };
 
   const addQuestion = () => {
