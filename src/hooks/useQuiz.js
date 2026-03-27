@@ -213,6 +213,13 @@ export function useQuiz() {
     loadQ(0);
   }, [loadQ]);
 
+  const resetScores = useCallback(() => {
+    const newScores = {};
+    playersRef.current.forEach(p => (newScores[p] = 0));
+    setScores(newScores);
+    setCurrentScreen('players');
+  }, []);
+
   return {
     questions, setQuestions, saveQuestions, saveAndPlay,
     currentScreen, goTo, goToEditor,
@@ -221,6 +228,6 @@ export function useQuiz() {
     currentQ, answered, selectedMulti,
     timeLeft, totalTime,
     showResult, resultData, setOnlineResult,
-    startGame, pickAnswer, confirmMulti, nextQuestion, restartGame,
+    startGame, pickAnswer, confirmMulti, nextQuestion, restartGame, resetScores,
   };
 }

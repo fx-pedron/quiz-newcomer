@@ -207,6 +207,7 @@ function HostApp() {
           players={quiz.players}
           scores={quiz.scores}
           restartGame={quiz.restartGame}
+          resetScores={quiz.resetScores}
           goTo={quiz.goTo}
           launch={launch}
         />

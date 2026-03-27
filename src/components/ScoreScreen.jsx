@@ -3,7 +3,7 @@ import { AVATAR_COLORS } from '../hooks/useQuiz';
 
 const MEDALS = ['🥇','🥈','🥉'];
 
-export default function ScoreScreen({ players, scores, restartGame, goTo, launch }) {
+export default function ScoreScreen({ players, scores, restartGame, resetScores, goTo, launch }) {
   useEffect(() => { launch(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sorted      = Object.entries(scores).sort((a, b) => b[1] - a[1]);
@@ -62,6 +62,7 @@ export default function ScoreScreen({ players, scores, restartGame, goTo, launch
 
       <div className="btn-group" style={{ marginTop: '16px', paddingBottom: '32px' }}>
         <button className="btn btn-primary"   onClick={restartGame}>🔄 Rejouer</button>
+        <button className="btn btn-secondary" onClick={resetScores}>♻️ Nouveau match</button>
         <button className="btn btn-secondary" onClick={() => goTo('splash')}>🏠 Accueil</button>
       </div>
     </div>
