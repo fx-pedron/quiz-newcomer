@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import quizWsPlugin from './vite-plugin-quiz-ws.js'
 
 export default defineConfig({
-  base: '/quiz-newcomer/',
+  base: '/',
   plugins: [react(), quizWsPlugin()],
   server: { host: true },
   optimizeDeps: {

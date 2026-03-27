@@ -9,11 +9,17 @@ export default function LobbyScreen({ roomCode, players, startGame, goTo, discon
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/network');
-        const { ips } = await res.json();
-        const ip = ips[0] || location.hostname;
-        const port = location.port ? `:${location.port}` : '';
-        const url = `http://${ip}${port}?join=${roomCode}`;
+        let url;
+        // In dev mode, use LAN IP for local play; in prod, use the public URL
+        if (import.meta.env.DEV) {
+          const res = await fetch('/api/network');
+          const { ips } = await res.json();
+          const ip = ips[0] || location.hostname;
+          const port = location.port ? `:${location.port}` : '';
+          url = `http://${ip}${port}?join=${roomCode}`;
+        } else {
+          url = `${location.origin}${location.pathname}?join=${roomCode}`;
+        }
         if (!cancelled) setJoinUrl(url);
 
         const QRCode = await import('qrcode');
