@@ -143,7 +143,7 @@ export default function EditorScreen({ questions: init, saveQuestions, saveAndPl
           <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: '28px' }}>✏️ Mes questions</h2>
           <div className="btn-group" style={{ flexWrap: 'wrap' }}>
             <button className="btn btn-secondary btn-sm" onClick={() => goTo('splash')}>← Retour</button>
-            <button className="btn btn-secondary btn-sm" onClick={() => { saveQuestions(qs); setSaved(true); setTimeout(() => setSaved(false), 2000); }}>
+            <button className="btn btn-secondary btn-sm" onClick={() => { const ok = saveQuestions(qs); if (ok) { setSaved(true); setTimeout(() => setSaved(false), 2000); } }}>
               {saved ? '✓ Sauvegardé !' : '💾 Sauver'}
             </button>
             <button className="btn btn-primary btn-sm" onClick={() => saveAndPlay(qs)}>▶ Jouer</button>

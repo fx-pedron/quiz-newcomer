@@ -149,14 +149,26 @@ export function useQuiz() {
   const goToEditor = useCallback(() => { setCurrentScreen('editor'); setShowResult(false); }, []);
 
   const saveQuestions = useCallback((qs) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(qs));
-    setQuestions(qs);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(qs));
+      setQuestions(qs);
+      return true;
+    } catch (e) {
+      console.error('Erreur sauvegarde localStorage:', e);
+      alert('Sauvegarde impossible : espace de stockage insuffisant. Essayez de réduire la taille des images ou utilisez l\'export JSON.');
+      return false;
+    }
   }, []);
 
   const saveAndPlay = useCallback((qs) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(qs));
-    setQuestions(qs);
-    setCurrentScreen('players');
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(qs));
+      setQuestions(qs);
+      setCurrentScreen('players');
+    } catch (e) {
+      console.error('Erreur sauvegarde localStorage:', e);
+      alert('Sauvegarde impossible : espace de stockage insuffisant. Essayez de réduire la taille des images ou utilisez l\'export JSON.');
+    }
   }, []);
 
   // ── Players ──────────────────────────────────────────────────────────────────
