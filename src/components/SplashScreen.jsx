@@ -1,4 +1,4 @@
-export default function SplashScreen({ goTo, goToEditor }) {
+export default function SplashScreen({ goTo, goToEditor, onJoin }) {
   const icons = [
     { emoji: '🙋', bg: 'var(--a)', shadow: 'rgba(226,27,60,.5)',  rot: '-4deg' },
     { emoji: '🕵️', bg: 'var(--b)', shadow: 'rgba(19,104,206,.5)', rot: '3deg'  },
@@ -39,6 +39,14 @@ export default function SplashScreen({ goTo, goToEditor }) {
         <div className="btn-group">
           <button className="btn btn-primary" onClick={() => goTo('players')}>▶ &nbsp;Jouer</button>
           <button className="btn btn-secondary" onClick={goToEditor}>✏️ &nbsp;Éditer les questions</button>
+        </div>
+
+        <div style={{ marginTop: '8px', textAlign: 'center' }}>
+          <div style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '8px' }}>— ou —</div>
+          <button className="btn btn-primary" onClick={onJoin}
+            style={{ background: 'linear-gradient(135deg, var(--c2), var(--c1))', width: '100%', maxWidth: '340px' }}>
+            🎮 &nbsp;Rejoindre une partie
+          </button>
         </div>
       </div>
     </div>

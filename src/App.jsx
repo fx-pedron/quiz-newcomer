@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuiz }        from './hooks/useQuiz';
 import { useMultiplayer } from './hooks/useMultiplayer';
 import { useConfetti }    from './hooks/useConfetti.jsx';
@@ -16,11 +16,15 @@ const params = new URLSearchParams(window.location.search);
 const joinCode = params.get('join');
 
 export default function App() {
-  if (joinCode) return <PlayerApp initialCode={joinCode} />;
-  return <HostApp />;
+  const [playerMode, setPlayerMode] = useState(!!joinCode);
+
+  if (playerMode) {
+    return <PlayerApp initialCode={joinCode || ''} onBack={() => setPlayerMode(false)} />;
+  }
+  return <HostApp onJoin={() => setPlayerMode(true)} />;
 }
 
-function HostApp() {
+function HostApp({ onJoin }) {
   const quiz              = useQuiz();
   const mp                = useMultiplayer();
   const { pieces, launch } = useConfetti();
@@ -156,7 +160,7 @@ function HostApp() {
   return (
     <>
       {quiz.currentScreen === 'splash' && (
-        <SplashScreen goTo={quiz.goTo} goToEditor={quiz.goToEditor} />
+        <SplashScreen goTo={quiz.goTo} goToEditor={quiz.goToEditor} onJoin={onJoin} />
       )}
 
       {quiz.currentScreen === 'editor' && (

@@ -5,7 +5,7 @@ import { AVATAR_COLORS } from '../hooks/useQuiz';
 const CLRS = ['a','b','c','d'];
 const LBLS = ['A','B','C','D'];
 
-export default function PlayerApp({ initialCode }) {
+export default function PlayerApp({ initialCode, onBack }) {
   const mp = useMultiplayer();
   const [phase, setPhase] = useState('join'); // join | lobby | question | answered | result | scores
   const [name, setName] = useState('');
@@ -124,6 +124,11 @@ export default function PlayerApp({ initialCode }) {
         <button className="btn btn-primary" onClick={handleJoin} style={{ width: '100%' }}>
           Rejoindre 🚀
         </button>
+        {onBack && (
+          <button className="btn btn-secondary" onClick={onBack} style={{ width: '100%' }}>
+            ← Retour
+          </button>
+        )}
       </div>
     );
   }
